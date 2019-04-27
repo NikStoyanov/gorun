@@ -6,12 +6,18 @@ the algorithm described in:
 https://developers.google.com/maps/documentation/utilities/polylinealgorithm
 */
 
-package main
+package util
 
 import (
 	"bytes"
 	"io"
 )
+
+// GpxData hold the Latitude-Longitude data
+type GpxData struct {
+	Latitude  float64
+	Longitude float64
+}
 
 // PolyEncode returns a new encoded Polyline from a given path of GpxData points.
 func PolyEncode(path []GpxData) string {

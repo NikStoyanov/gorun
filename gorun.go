@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/NikStoyanov/gorun/util"
+
 	"fyne.io/fyne"
 	"fyne.io/fyne/app"
 	"fyne.io/fyne/canvas"
@@ -21,7 +23,7 @@ import (
 // GoRun an app to display and edit GPX data using Google maps
 type GoRun struct {
 	Img          mapsImage
-	gpxDataArray []GpxData
+	gpxDataArray []util.GpxData
 
 	image   *canvas.Image
 	iDEntry *widget.Entry
@@ -37,7 +39,7 @@ type mapSize struct {
 type mapMarker struct {
 	Color string
 	Label string
-	Coord GpxData
+	Coord util.GpxData
 }
 
 // mapsImage is to draw image from the Google maps API
@@ -51,12 +53,6 @@ type mapsImage struct {
 	Scale      int16
 	MarkStart  mapMarker
 	MarkFinish mapMarker
-}
-
-// GpxData hold the Latitude-Longitude data
-type GpxData struct {
-	Latitude  float64
-	Longitude float64
 }
 
 // NewGPX returns a new activity app
@@ -113,12 +109,12 @@ func (x *GoRun) readGPXFile(fileName string) {
 	for _, track := range gpxFile.Tracks {
 		for _, segment := range track.Segments {
 			for _, point := range segment.Points {
-				x.gpxDataArray = append(x.gpxDataArray, GpxData{point.Latitude, point.Longitude})
+				x.gpxDataArray = append(x.gpxDataArray, util.GpxData{point.Latitude, point.Longitude})
 			}
 		}
 	}
 
-	x.Img.Polyline = PolyEncode(x.gpxDataArray)
+	x.Img.Polyline = util.PolyEncode(x.gpxDataArray)
 	x.Img.MarkStart.Coord = x.gpxDataArray[0]
 	x.Img.MarkFinish.Coord = x.gpxDataArray[len(x.gpxDataArray)-1]
 }
